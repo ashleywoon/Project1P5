@@ -35,6 +35,9 @@ var slider, sliderHPos, sliderVPos, v, sliderWidth;
 var minValue=0;
 var maxValue=6;
 
+//
+var tabA = false;
+
 function preload() {
 	//load notes
 	allNotes = loadSound('assets/allNotes.mp3');
@@ -69,6 +72,8 @@ function setup() {
 }
 
 function draw() {
+	background(0);
+	drawStatic();
 	drawSliderStates();
 	mouseHover();
 	if(state==static & key=='p') {
@@ -147,22 +152,28 @@ function drawGuitar() {
 	fill(0);
 	ellipse(width/2, height/2,300,300);
 	stroke(150);
-	strokeWeight(5);
+	strokeWeight(7);
 	string1=line(200,245, 1000,245);
+	strokeWeight(6);
 	string2=line(200,290, 1000,290);
+	strokeWeight(5);
 	string3=line(200,335, 1000,335);
+	strokeWeight(4);
 	string4=line(200,380, 1000,380);
+	strokeWeight(3);
 	string5=line(200,425, 1000,425);
+	strokeWeight(2);
 	string6=line(200,470, 1000,470);
 }
 
 function drawStatic() {
 	drawGuitar();
+	noStroke();
 	textSize(50);
-	text("Welcome to Guitar Intro", width/3,100);
+	text("Welcome to Guitar Intro", width/4,100);
 	textSize(25);
-	text("Use your mouse to play each string or", width/3, 150);
-	text("Use the slider below", width/2-50, 600);
+	text("Use your mouse to play each string or", width/4, 150);
+	text("Change notes using the slider below", width/2-120, sliderVPos-20);
 	textSize(50);
 	//strings
 	text("E",100,260);
@@ -174,12 +185,38 @@ function drawStatic() {
 	img=imgList[0];
 	print(img);
 	image(img, 0,10,200,170);
+	drawTabs();
 }
 
+//Version 2 navigation tabs
+function drawTabs() {
+	//Basics tab
+	rect(880,20, 150,50);
+	//Intermediate tab
+	rect(850,80, 150,50);
+	//tab texts
+	textSize(20);
+	fill(255);
+	text("Basics", 900,50);
+	text("Intermediate", 870,115)
+
+	if(mouseY<=130 & mouseY>=80) {
+		if(mouseX<=1000 & mouseX>=880)
+		{
+			if(tabA==true) {
+				drawFretboard();
+			}
+		}
+	}
+}
 function drawE2() {
 	drawGuitar();
 	stroke(orange);
+	strokeWeight(7);
 	string1=line(200,245, 1000,245);
+	fill(orange);
+	noStroke();
+	textSize(50);
 	text("Thickest string on top",350,180);
 	text("E",100,250);
 	text("E", sliderHPos +slider.width, sliderVPos);
@@ -191,7 +228,11 @@ function drawE2() {
 function drawA() {
 	drawGuitar();
 	stroke(yellow);
+	strokeWeight(6);
 	string2=line(200,290, 1000,290);
+	fill(yellow);
+	noStroke();
+	textSize(50);
 	text("A",100,295);
 	text("A", sliderHPos +slider.width, sliderVPos);
 	img=imgList[2];
@@ -201,8 +242,12 @@ function drawA() {
 
 function drawD() {
 	drawGuitar();
-	stroke(bl);
+	stroke(bl)
+	strokeWeight(5);
 	string3=line(200,335, 1000,335);
+	fill(bl);
+	noStroke();
+	textSize(50);
 	text("D",100,340);
 	text("D", sliderHPos +slider.width, sliderVPos);
 	img=imgList[3];
@@ -213,7 +258,11 @@ function drawD() {
 function drawG() {
 	drawGuitar();
 	stroke(purple);
+	strokeWeight(4);
 	string4=line(200,380, 1000,380);
+	fill(purple);
+	noStroke();
+	textSize(50);
 	text("G",100,385);
 	text("G", sliderHPos +slider.width, sliderVPos);
 	img=imgList[4];
@@ -224,7 +273,11 @@ function drawG() {
 function drawB() {
 	drawGuitar();
 	stroke(r);
+	strokeWeight(3);
 	string5=line(200,425, 1000,425);
+	fill(r);
+	noStroke();
+	textSize(50);
 	text("B",100,430);
 	text("B", sliderHPos +slider.width, sliderVPos);
 	img=imgList[5];
@@ -235,7 +288,10 @@ function drawB() {
 function drawE4() {
 	drawGuitar();
 	stroke(gr);
+	strokeWeight(2);
 	string6=line(200,470, 1000,470);
+	fill(gr);
+	noStroke();
 	textSize(25);
 	text("Thinest string on the bottom",350,550);
 	textSize(50);
@@ -245,6 +301,7 @@ function drawE4() {
 	print(img);
 	image(img, 0,10,200,170);	
 }
+//end original states
 
 function drawSlider() {
 	sliderVPos = height-40;
@@ -310,5 +367,35 @@ function mouseHover() {
 	else if(mouseY<480 & mouseY>460) {
 		state=stateE4;
 		drawE4();
+	}
+}
+
+//Version 2 in progress additions
+function mouseClicked() {
+	tabA =! tabA;
+}
+
+function drawFretboard() {
+	fill(0);
+	rect(0,0, 200,1000);
+	fill(130,82,1);
+	rect(0,0, 28,1000);
+	rect(170,0, 32,1000);
+	var board=200;
+	//spacing note 200/6=33.33
+	var fretX=25;
+	var fretY=37;
+
+	fill(255);
+	stroke(255);
+	for(var i=1; i<7; i++) {
+		line(fretX,0, fretX,700);
+		text(i, fretX,11);
+		fretX+=30;
+	}
+	for(var j=1; j<20; j++) {
+		line(0,fretY, 200,fretY);
+		text(j, 11,fretY);
+		fretY+=37;
 	}
 }
